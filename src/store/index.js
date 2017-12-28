@@ -8,7 +8,8 @@ import ToDoEpic from './epics/toDoEpic';
         ToDoEpic.addToDo,
         ToDoEpic.getTodos,
         ToDoEpic.deleteToDo,
-        ToDoEpic.completedToDo
+        ToDoEpic.completedToDo,
+        ToDoEpic.updateToDo
     )
     const rootReducer = combineReducers({
         toDoReducer

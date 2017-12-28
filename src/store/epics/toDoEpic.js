@@ -47,6 +47,16 @@ export default class ToDoEpic {
             })
         })
     }
+    static updateToDo = (action$)=>{
+        return action$.ofType(ToDoAction.UPDATE_TODO)
+        .switchMap(({payload })=>{
+            console.log(payload)
+            return Observable.fromPromise(ref.child(`${payload.key}/todo`).set(`${payload.val}`))
+            .map((x)=>{
+                return { type : ToDoAction.NULL}
+            })
+        })
+    }
 
 
     static getTodos = (action$)=>{
@@ -80,6 +90,7 @@ export default class ToDoEpic {
                             }
                         })
                     })
+                    
                 })
             })
     }

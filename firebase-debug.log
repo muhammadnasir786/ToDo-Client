@@ -1,0 +1,27 @@
+[debug] [2017-12-28T12:09:13.214Z] ----------------------------------------------------------------------
+[debug] [2017-12-28T12:09:13.214Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\hp pc\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase open
+[debug] [2017-12-28T12:09:13.214Z] CLI Version:   3.16.0
+[debug] [2017-12-28T12:09:13.214Z] Platform:      win32
+[debug] [2017-12-28T12:09:13.214Z] Node Version:  v8.9.3
+[debug] [2017-12-28T12:09:13.214Z] Time:          Thu Dec 28 2017 04:09:13 GMT-0800 (Pacific Standard Time)
+[debug] [2017-12-28T12:09:13.214Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-12-28T12:09:13.229Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2017-12-28T12:09:13.229Z] > authorizing via signed-in user
+[debug] [2017-12-28T12:09:13.229Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-12-28T12:09:13.229Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/0OLlOryZUYHXtYvaZY_AMkciLuWlKT-m7q5ADEL8GLo',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu Dec 28 2017 04:09:13 GMT-0800 (Pacific Standard Time)
+[debug] [2017-12-28T12:09:14.057Z] <<< HTTP RESPONSE 200
+[debug] [2017-12-28T12:09:14.073Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/reactreduxtodoappfirebase  
+  
+ Thu Dec 28 2017 04:09:14 GMT-0800 (Pacific Standard Time)
+[debug] [2017-12-28T12:09:15.299Z] <<< HTTP RESPONSE 200
+[debug] [2017-12-28T12:09:15.299Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/reactreduxtodoappfirebase/tokens  
+  
+ Thu Dec 28 2017 04:09:15 GMT-0800 (Pacific Standard Time)
+[debug] [2017-12-28T12:09:16.388Z] <<< HTTP RESPONSE 200
