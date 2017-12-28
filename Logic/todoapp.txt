@@ -1,0 +1,14 @@
+1) . 1st all listner subscribe by one Epic (Child_added,remove , change)
+2) . when getting data from firebase Must set key of that todo
+like jneucbkabkancskcmklamsc : { val : 'nasjr' , completed : false}
+Epics 
+	. add ToDo on firebase
+	. completed todo on firebase
+	. removed on firebase
+note - when we add , edit , delete ,in the end of the epic action dispatch like this { type : toDoAction.NULL}
+	Q k database me koi change hoga tw listner chalengy khud ba khud
+	or on listner k against hum reducer chalaengy ( for redux state on Client)
+Reducers :
+	. get todo add on client redux state
+	. get todo complete //   //    //
+	. removed when      //   //    // 
