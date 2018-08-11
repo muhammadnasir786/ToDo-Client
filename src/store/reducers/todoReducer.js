@@ -6,8 +6,14 @@ let INITIAL_STATE = {
 }
 function toDoReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
+        case ToDoAction.GET_TODOS_ADD:
+            console.log(action.payload)
+            // let newToDo = Object.assign({}, state.todos);
+            // newToDo[action.payload.key] = action.payload.val;
+
+            return ({ ...state, todos: action.payload })
         case ToDoAction.GET_ADD_TODO:
-            // console.log(action)
+            console.log(action.payload,"action")
             let newToDo = Object.assign({}, state.todos);
             newToDo[action.payload.key] = action.payload.val;
             return ({ ...state, todos: newToDo })
@@ -21,9 +27,9 @@ function toDoReducer(state = INITIAL_STATE, action) {
             let newToDoss = Object.assign({}, state.todos);
             // console.log(action)
             newToDoss[action.payload.key] = action.payload.val;
-            return { ...state , todos : newToDoss }
+            return { ...state, todos: newToDoss }
         default:
-        return state;
+            return state;
             break;
     }
 

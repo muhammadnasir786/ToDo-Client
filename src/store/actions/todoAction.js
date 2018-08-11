@@ -7,7 +7,8 @@ import { startWith } from "rxjs/operators/startWith";
 class ToDoAction {
     //--------------- For Epics ---------------
     static GET_TODO = 'GET_TODO'               // For Subscribe all Listiner
-    
+    static GET_TODOS_ADD = 'GET_TODOS_ADD'               // For Subscribe all Listiner
+
     static ADD_TODO = 'ADD_TODO'              // on firebase
     static DELETE_TODO = 'DELETE_TODO';      // //
     static COMPLETED_TODO = 'COMPLETED_TODO'// //
@@ -18,34 +19,40 @@ class ToDoAction {
     static GET_COMPLETED_TODO = 'GET_COMPLETED_TODO'      // For Client REdux state
     static GET_UPDATE_TODO = 'GET_UPDATE_TODO'
     static NULL = "NULL"
-    static getToDo(){
+    static getToDoAdd(todos) {
         return {
-            type : ToDoAction.GET_TODO
+            type: ToDoAction.GET_TODOS_ADD,
+            payload: todos
         }
     }
-    static addToDo(data){
+    static getToDo() {
         return {
-            type : ToDoAction.ADD_TODO,
-            payload : data
+            type: ToDoAction.GET_TODO
         }
     }
-    static completedToDo(data){
+    static addToDo(data) {
         return {
-            type : ToDoAction.COMPLETED_TODO,
-            payload : data
+            type: ToDoAction.ADD_TODO,
+            payload: data
         }
     }
-    static deleteToDo(data){
+    static completedToDo(data) {
         return {
-            type : ToDoAction.DELETE_TODO,
-            payload : data
+            type: ToDoAction.COMPLETED_TODO,
+            payload: data
         }
     }
-    static updateToDo(data){
+    static deleteToDo(data) {
         return {
-            type : ToDoAction.UPDATE_TODO,
-            payload : data
+            type: ToDoAction.DELETE_TODO,
+            payload: data
         }
-    } 
+    }
+    static updateToDo(data) {
+        return {
+            type: ToDoAction.UPDATE_TODO,
+            payload: data
+        }
+    }
 }
 export default ToDoAction;

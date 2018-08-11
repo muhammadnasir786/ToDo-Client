@@ -6,7 +6,7 @@ import ToDoEpic from './epics/toDoEpic';
 
     const rootEpic = combineEpics(
         ToDoEpic.addToDo,
-        ToDoEpic.getTodos,
+        ToDoEpic.getToDos,
         ToDoEpic.deleteToDo,
         ToDoEpic.completedToDo,
         ToDoEpic.updateToDo

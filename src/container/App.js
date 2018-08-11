@@ -4,7 +4,9 @@ import './App.css';
 import * as firebase from 'firebase'
 import { connect } from 'react-redux'
 import TodoAction from '../store/actions/todoAction';
+import Axios from 'axios';
 
+import io from "socket.io-client";
 let mapStateToProps = (state) => {
   // console.log(state.toDoReducer.todos)
   return {
@@ -29,12 +31,35 @@ class App extends Component {
       flage: true
     }
     this.props.getToDos();
+    this.socket = io('/');
+
 
   }
+  componentDidMount() {
+    // this.socket.on('GET_TODO_ADD', todo => {
+    //   console.log(todo, 'TODO')
+    // });
+    // // GET TODO DELETE
+    // this.socket.on('GET_TODO_DELETE', todoID => {
 
+    // });
+    // // COMPLETED TODO
+    // this.socket.on('GET_TODO_COMPLETED', todoId => {
+
+    // });
+    // // TODO UPADTE
+    // this.socket.on('GET_TODO_UPDATE', todoo => {
+    //   // console.log(todo)
+
+    // });
+  }
   addToDo = (e) => {
     e.preventDefault();
-    this.props.addToDo({ todo: this.state.todo, isCompleted: false })
+    // this.props.addToDo({ text: this.state.todo, isDone: false })
+    this.socket.emit('ADD_TODO', {
+      text: this.state.todo,
+      isDone: false
+    })
     this.setState({ todo: '' })
 
   }
@@ -48,9 +73,14 @@ class App extends Component {
         <h2>Muhammad Nasir  <br />Roll No : 7240</h2>
         <div>
           <input type='text' value={this.state.todo} onChange={(e) => { this.setState({ todo: e.target.value }) }} />
+
           <button onClick={this.addToDo}>Add todo</button>
         </div>
-
+        {/* <button onClick={() => {
+          Axios.get('/todos').then((res) => {
+            console.log(res,'res')
+          })
+        }}> get ToDos </button> */}
         <ol>
           {Object.keys(this.props.todos).map((key, index) => {
             let val = this.props.todos[key];
@@ -89,7 +119,7 @@ class Item extends React.Component {
       <div>
         {this.state.flage ?
           <li>
-            {(this.props.todo.todo)}
+            {(this.props.todo.text)}
             <button onClick={() => this.props.completedToDo(this.props.index)}>{this.props.todo.isCompleted ? 'Complete' : 'InCompleted'}</button>
             <button onClick={() => { this.props.deleteToDo({ key: this.props.index }) }}>DeleteToDo</button>
             <button onClick={this.toggleState}>Edit</button>

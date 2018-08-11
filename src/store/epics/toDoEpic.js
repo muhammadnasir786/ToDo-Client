@@ -1,96 +1,151 @@
 
 import { Observable } from 'rxjs'
-import  ToDoAction from "../actions/todoAction";
-
-import * as firebase from 'firebase';
-var config = {
-    apiKey: "AIzaSyDqPpxlIGjEikoqzvZqB7_-10158KdfxOs",
-    authDomain: "reactreduxtodoappfirebase.firebaseapp.com",
-    databaseURL: "https://reactreduxtodoappfirebase.firebaseio.com",
-    projectId: "reactreduxtodoappfirebase",
-    storageBucket: "",
-    messagingSenderId: "866095779438"
-  };
-firebase.initializeApp(config);
-  
-let ref = firebase.database().ref('/todo');
-// ref.push({name:'yasir'});
-
+import ToDoAction from "../actions/todoAction";
+import { api } from "../../services/api";
+import io from "socket.io-client";
+let socket = io('/');
 export default class ToDoEpic {
-    static addToDo = (action$)=>{
-      return  action$.ofType(ToDoAction.ADD_TODO)
-            .switchMap(({ payload })=>{
-                return Observable.fromPromise(ref.push(payload))
-                .map((x)=>{
-                    return { type : ToDoAction.NULL}
-                })
+    static addToDo = (action$) =>
+        action$.ofType(ToDoAction.ADD_TODO)
+            .switchMap(({ payload }) => {
+                return api.addToDo(payload)
+                    .switchMap(({ response }) => {
+                        console.log(response, 'ADd ToDo')
+                        return (
+                            Observable.of({
+                                type: null
+                            })
+                        )
+                    }).catch((error) => {
+                        return Observable.of({
+                            type: null,
+                        });
+                    })
             })
-    }
 
-    static deleteToDo = (action$)=>{
+    static getToDos = (action$) =>
+        action$.ofType(ToDoAction.GET_TODO)
+            .switchMap(({ payload }) => {
+                return api.getToDos()
+                    .switchMap(({ response }) => {
+                        console.log(response, 'responce')
+                        return (
+                            Observable.of({
+                                type: ToDoAction.GET_TODOS_ADD,
+                                payload: response.allToDos
+                            })
+                        )
+                    }).catch((error) => {
+                        return Observable.of({
+                            type: null
+                        });
+                    })
+            })
+
+
+    // static listnerGetToDos = (action$) => {
+    //     return action$.ofType()
+    //         .switchMap(({ payload }) => {
+    //             return Observable.fromPromise(
+
+    //             )
+    //                 .map((x) => {
+    //                     return { type: ToDoAction.NULL }
+    //                 })
+    //         })
+
+    // }
+
+    static deleteToDo = (action$) => {
         return action$.ofType(ToDoAction.DELETE_TODO)
-            .switchMap(({ payload })=>{
-                return Observable.fromPromise(ref.child(payload.key).set(null))
-                .map((x)=>{
-                    return { type : ToDoAction.NULL}
-                })
+            .switchMap(({ payload }) => {
+                return Observable.fromPromise(
+
+                )
+                    .map((x) => {
+                        return { type: ToDoAction.NULL }
+                    })
             })
 
     }
-    static completedToDo = (action$)=>{
+
+    // static addToDo = (action$) => {
+    //     return action$.ofType(ToDoAction.ADD_TODO)
+    //         .switchMap(({ payload }) => {
+    //             console.log(payload)
+    //             return Observable.fromPromise(
+    //                 socket.emit('ADD_TODO', {
+    //                     text: payload,
+    //                     isDone: false
+    //                 })
+    //             )
+    //                 .map((x) => {
+    //                     return { type: ToDoAction.NULL }
+    //                 })
+    //         })
+
+    // }
+    static completedToDo = (action$) => {
         return action$.ofType(ToDoAction.COMPLETED_TODO)
-        .switchMap(({payload })=>{
-            console.log(payload)
-            return Observable.fromPromise(ref.child(`${payload}/isCompleted`).set(true))
-            .map((x)=>{
-                return { type : ToDoAction.NULL}
+            .switchMap(({ payload }) => {
+                console.log(payload)
+                return Observable.fromPromise(
+
+                )
+                    .map((x) => {
+                        return { type: ToDoAction.NULL }
+                    })
             })
-        })
     }
-    static updateToDo = (action$)=>{
+    static updateToDo = (action$) => {
         return action$.ofType(ToDoAction.UPDATE_TODO)
-        .switchMap(({payload })=>{
-            console.log(payload)
-            return Observable.fromPromise(ref.child(`${payload.key}/todo`).set(`${payload.val}`))
-            .map((x)=>{
-                return { type : ToDoAction.NULL}
+            .switchMap(({ payload }) => {
+                console.log(payload)
+                return Observable.fromPromise(
+
+                )
+                    .map((x) => {
+                        return { type: ToDoAction.NULL }
+                    })
             })
-        })
     }
 
 
-    static getTodos = (action$)=>{
-       
+    static getTodos = (action$) => {
+        console.log(action$,'actions$$$$$')
         return action$.ofType(ToDoAction.GET_TODO)
-            .switchMap(({ payload })=>{
-                return new Observable((observer)=>{
-                    ref.on('child_added',(s)=>{
+            .switchMap(({ payload }) => {
+                return new Observable((observer) => {
+                    socket.on('GET_TODO_ADD', todo => {
+                        console.log(todo , 'GET TODO ADD')
                         observer.next({
                             type: ToDoAction.GET_ADD_TODO,
-                            payload : {
-                                key : s.key,
-                                val : s.val()
-                            }
+                            payload: todo
                         })
-                    })
-                    ref.on('child_removed',(s)=>{
-                        console.log(s.val(),s.key)
-                        observer.next({
-                            type : ToDoAction.GET_DELETE_TODO,
-                            payload : s.key
-                        })
-                    })
-                    ref.on('child_changed',(s)=>{
-                        console.log(s.val(),s.key)
-                        observer.next({
-                            type : ToDoAction.GET_COMPLETED_TODO,
-                            payload : {
-                                key : s.key,
-                                val : s.val()
-                            }
-                        })
-                    })
-                    
+                    });
+                    // // GET TODO DELETE
+                    // socket.on('GET_TODO_DELETE', todoID => {
+                    //     let todos = this.state.todos;
+                    //     todos = todos.filter(todo => todo._id !== todoID);
+                    //     this.setState({ todos: todos })
+                    // });
+                    // // COMPLETED TODO
+                    // socket.on('GET_TODO_COMPLETED', todoId => {
+                    //     let todos = this.state.todos;
+                    //     let todoObj = todos.find((todo) => todo._id === todoId).isDone = true;
+                    //     this.setState({ todos: todos })
+                    // });
+                    // // TODO UPADTE
+                    // socket.on('GET_TODO_UPDATE', todoo => {
+                    //     // console.log(todo)
+                    //     let todos = this.state.todos;
+                    //     let todoObj = todos.find((todo) => todo._id === todoo._id);
+                    //     todoObj.text = todoo.text;
+                    //     todoObj.isDone = todoo.isDone;
+                    //     console.log(todoObj)
+                    //     this.setState({ todos: todos })
+                    // });
+
                 })
             })
     }
