@@ -12,22 +12,30 @@ function toDoReducer(state = INITIAL_STATE, action) {
             // newToDo[action.payload.key] = action.payload.val;
 
             return ({ ...state, todos: action.payload })
-        case ToDoAction.GET_ADD_TODO:
-            console.log(action.payload,"action")
-            let newToDo = Object.assign({}, state.todos);
-            newToDo[action.payload.key] = action.payload.val;
-            return ({ ...state, todos: newToDo })
+        case ToDoAction.ADD_TODO:
+            let Alltodos = [].concat(state.todos);
+            Alltodos.push(action.payload);
+            return ({ ...state, todos: Alltodos })
             break;
         case ToDoAction.DELETE_TODO:
-            let newToDos = Object.assign({}, state.todos);
-            // console.log(action.payload.key)
-            delete newToDos[action.payload.key];
-            return { ...state, todos: newToDos }
-        case ToDoAction.GET_COMPLETED_TODO:
-            let newToDoss = Object.assign({}, state.todos);
-            // console.log(action)
-            newToDoss[action.payload.key] = action.payload.val;
-            return { ...state, todos: newToDoss }
+            console.log(action.payload, '')
+            let Alltodoss = [].concat(state.todos);
+            Alltodoss = Alltodoss.filter((todo) => todo._id !== action.payload);
+            return { ...state, todos: Alltodoss }
+        case ToDoAction.COMPLETED_TODO:
+            console.log(action.payload, 'ACTION')
+            let todos = [].concat(state.todos);
+            todos.find((todo) => todo._id == action.payload).isDone = true;
+            console.log(todos, '----------')
+            return { ...state, todos: todos }
+        case ToDoAction.UPDATE_TODO:
+            console.log(action.payload, 'ACTION')
+            let todoss = [].concat(state.todos);
+            let obj = todoss.find((todo) => todo._id == action.payload._id);
+            console.log(obj, 'FIND OBj')
+            obj.text = action.payload.text;
+            obj.isDone = action.payload.isDone;
+            return { ...state, todos: todoss }
         default:
             return state;
             break;

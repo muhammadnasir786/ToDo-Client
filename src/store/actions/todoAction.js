@@ -19,6 +19,7 @@ class ToDoAction {
     static GET_COMPLETED_TODO = 'GET_COMPLETED_TODO'      // For Client REdux state
     static GET_UPDATE_TODO = 'GET_UPDATE_TODO'
     static NULL = "NULL"
+
     static getToDoAdd(todos) {
         return {
             type: ToDoAction.GET_TODOS_ADD,
@@ -30,6 +31,7 @@ class ToDoAction {
             type: ToDoAction.GET_TODO
         }
     }
+    // Reducer for checking purpose
     static addToDo(data) {
         return {
             type: ToDoAction.ADD_TODO,

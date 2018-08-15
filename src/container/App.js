@@ -31,27 +31,32 @@ class App extends Component {
       flage: true
     }
     this.props.getToDos();
-    this.socket = io('/');
+    this.socket = io.connect('https://todo-server-app-fullstack.herokuapp.com/');
 
 
   }
   componentDidMount() {
-    // this.socket.on('GET_TODO_ADD', todo => {
-    //   console.log(todo, 'TODO')
-    // });
-    // // GET TODO DELETE
-    // this.socket.on('GET_TODO_DELETE', todoID => {
-
-    // });
-    // // COMPLETED TODO
-    // this.socket.on('GET_TODO_COMPLETED', todoId => {
-
-    // });
-    // // TODO UPADTE
-    // this.socket.on('GET_TODO_UPDATE', todoo => {
-    //   // console.log(todo)
-
-    // });
+    this.socket.on('connection', (sock) => {
+      console.log(sock)
+    })
+    this.socket.on('GET_TODO_ADD', todo => {
+      // console.log(todo, 'TODO')
+      this.props.addToDo(todo);
+    });
+    // GET TODO DELETE
+    this.socket.on('GET_TODO_DELETE', todoID => {
+      // console.log(todoID, 'todoIDtodoIDtodoID')
+      this.props.deleteToDo(todoID)
+    });
+    // COMPLETED TODO
+    this.socket.on('GET_TODO_COMPLETED', todoId => {
+      this.props.completedToDo(todoId)
+    });
+    // TODO UPADTE
+    this.socket.on('GET_TODO_UPDATE', todo => {
+      console.log(todo, 'TODOOOOOOO')
+      this.props.updateToDo(todo)
+    });
   }
   addToDo = (e) => {
     e.preventDefault();
@@ -93,8 +98,8 @@ class App extends Component {
                 completedToDo={this.props.completedToDo}
                 index={key}
                 updateToDo={this.props.updateToDo}
+                socket={this.socket}
               />
-
             )
           })}
         </ol>
@@ -107,12 +112,29 @@ class Item extends React.Component {
     super(props);
     this.state = {
       flage: true,
-      todo: this.props.todo.todo
+      todo: this.props.todo.text
     }
 
   }
   toggleState = () => {
-    this.setState({ flage: !this.state.flage })
+    this.setState({ flage: !this.state.flage, todo: this.props.todo.text })
+  }
+  completeToDo = (id) => {
+    this.props.socket.emit('COMPLETED_TODO', id)
+  }
+  deleteToDo = (id) => {
+    console.log('ClCICK DELETE')
+    this.props.socket.emit('DELETE_TODO', id)
+  }
+  updateToDo = () => {
+    let idToDo = {
+      id: this.props.todo._id,
+      todo: {
+        text: this.state.todo,
+        isDone: this.props.todo.isDone
+      }
+    }
+    this.props.socket.emit('UPDATE_TODO', idToDo)
   }
   render() {
     return (
@@ -120,8 +142,9 @@ class Item extends React.Component {
         {this.state.flage ?
           <li>
             {(this.props.todo.text)}
-            <button onClick={() => this.props.completedToDo(this.props.index)}>{this.props.todo.isCompleted ? 'Complete' : 'InCompleted'}</button>
-            <button onClick={() => { this.props.deleteToDo({ key: this.props.index }) }}>DeleteToDo</button>
+            <button onClick={() => this.completeToDo(this.props.todo._id)}>
+              {this.props.todo.isDone ? 'Complete' : 'InCompleted'}</button>
+            <button onClick={() => { this.deleteToDo(this.props.todo._id) }}>DeleteToDo</button>
             <button onClick={this.toggleState}>Edit</button>
           </li> : <li>
             <input type='text' value={this.state.todo} onChange={(e) => {
@@ -131,7 +154,8 @@ class Item extends React.Component {
             />
             <button onClick={(e) => {
               e.preventDefault();
-              this.props.updateToDo({ key: this.props.index, val: this.state.todo })
+              // this.props.updateToDo({ id: this.props.todo._id, todo: this.state.todo })
+              this.updateToDo({ id: this.props.todo._id, text: this.state.todo })
               this.setState({ flage: !this.state.flage })
             }}>Update</button>
           </li>}
