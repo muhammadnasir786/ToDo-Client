@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
-import './App.css';
+// import './App.css';
 import * as firebase from 'firebase'
 import { connect } from 'react-redux'
 import TodoAction from '../store/actions/todoAction';
@@ -74,8 +74,10 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1>ToDo App with React-Redux-Firebase </h1>
-        <h2>Muhammad Nasir  <br />Roll No : 7240</h2>
+        <h1>Real Time Full Stack ToDo App </h1>
+        <h2>Front-End : React , Redux , Epic </h2>
+        <h2>Back-End : Node , Express , Socket.io , MongoDb </h2>
+        
         <div>
           <input type='text' value={this.state.todo} onChange={(e) => { this.setState({ todo: e.target.value }) }} />
 
